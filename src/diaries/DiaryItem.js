@@ -1,17 +1,19 @@
 import {
   Avatar,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React from "react";
 
-const DiaryItem = () => {
+const DiaryItem = ({ title, description, image, location, date, id }) => {
   return (
     <Card
       sx={{
@@ -35,19 +37,15 @@ const DiaryItem = () => {
             {<EditLocationAltIcon />}
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        header="NEW DELHI"
-        subheader="September 14, 2016"
+        title={location}
+        header={location}
+        subheader={date}
       />
 
-      <img
-        height="194"
-        src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-        alt="Paella dish"
-      />
+      <img height="194" src={image} alt={title} />
       <CardContent>
         <Typography paddingBottom={1} variant="h6" color="text.secondary">
-          This impressive paella
+          {title}
         </Typography>
         <hr />
         <Box paddingTop={1} display="flex">
@@ -55,12 +53,18 @@ const DiaryItem = () => {
             Nikhil Thadani:
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
+            {description}
           </Typography>
         </Box>
       </CardContent>
+      <CardActions sx={{ marginLeft: "auto" }}>
+        <IconButton color="warning">
+          <ModeEditOutlineIcon />
+        </IconButton>
+        <IconButton color="error">
+          <DeleteForeverIcon />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 };
