@@ -91,7 +91,7 @@ export const getPostById = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const id = req.params.id;
-  const { title, description, location, date, image } = req.body;
+  const { title, description, location, image } = req.body;
 
   if (
     !title &&
@@ -100,7 +100,6 @@ export const updatePost = async (req, res) => {
     description.trim() === "" &&
     !location &&
     location.trim() === "" &&
-    !date &&
     !image &&
     image.trim() === ""
   ) {
@@ -113,7 +112,6 @@ export const updatePost = async (req, res) => {
       title,
       description,
       image,
-      date: new Date(`${date}`),
       location,
     });
   } catch (err) {
@@ -135,7 +133,7 @@ export const deletePost = async (req, res) => {
     post = await Post.findById(id).populate("user");
     post.user.posts.pull(post);
     await post.user.save({ session });
-    post = await Post.findByIdAndRpemove(id);
+    post = await Post.findByIdAndRemove(id);
     session.commitTransaction();
   } catch (err) {
     return console.log(err);

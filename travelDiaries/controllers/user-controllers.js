@@ -15,6 +15,23 @@ export const getAllUsers = async (req, res) => {
 
   return res.status(200).json({ users });
 };
+
+export const getUserById = async (req, res) => {
+  const id = req.params.id;
+
+  let user;
+  try {
+    user = await User.findById(id).populate("posts");
+  } catch (err) {
+    return console.log(err);
+  }
+  if (!user) {
+    return res.status(404).json({ message: "No user found" });
+  }
+
+  return res.status(200).json({ user });
+};
+
 export const signup = async (req, res, next) => {
   const { name, email, password } = req.body;
   if (
