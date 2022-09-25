@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Box, Button, FormLabel, TextField, Typography } from "@mui/material";
 import { sendAuthRequest } from "../api-helpers/helpers";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store";
 const Auth = () => {
+  const dispatch = useDispatch();
   const [isSignup, setIsSignup] = useState(true);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -9,11 +12,17 @@ const Auth = () => {
 
     if (isSignup) {
       sendAuthRequest(true, inputs)
-        .then((data) => console.log(data))
+        .then((data) => localStorage.setItem("userId", data.user._id))
+        .then(() => {
+          dispatch(authActions.login());
+        })
         .catch((err) => console.log(err));
     } else {
       sendAuthRequest(false, inputs)
-        .then((data) => console.log(data))
+        .then((data) => localStorage.setItem("userId", data.id))
+        .then(() => {
+          dispatch(authActions.login());
+        })
         .catch((err) => console.log(err));
     }
   };
@@ -83,7 +92,6 @@ const Auth = () => {
           <Button
             onClick={() => setIsSignup(!isSignup)}
             sx={{ mt: 2, borderRadius: 10 }}
-            type="submit"
             variant="outlined"
           >
             Change to {isSignup ? "Login" : "Signup"}

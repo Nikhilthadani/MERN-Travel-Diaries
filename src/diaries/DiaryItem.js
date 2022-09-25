@@ -1,19 +1,37 @@
 import {
+  Alert,
   Avatar,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   IconButton,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import React from "react";
+import React, { useState } from "react";
 
-const DiaryItem = ({ title, description, image, location, date, id }) => {
+import { Link } from "react-router-dom";
+import { postDelete } from "../api-helpers/helpers";
+const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+  const [open, setOpen] = useState(false);
+  const isLoogedInUser = () => {
+    if (localStorage.getItem("userId") === user) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleDelete = () => {
+    postDelete(id)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+    setOpen(true);
+  };
   return (
     <Card
       sx={{
@@ -49,7 +67,12 @@ const DiaryItem = ({ title, description, image, location, date, id }) => {
         </Typography>
         <hr />
         <Box paddingTop={1} display="flex">
-          <Typography width="170px" fontWeight={"bold"} variant="caption">
+          <Typography
+            width="auto"
+            sx={{ mr: 1 }}
+            fontWeight={"bold"}
+            variant="caption"
+          >
             Nikhil Thadani:
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -57,14 +80,31 @@ const DiaryItem = ({ title, description, image, location, date, id }) => {
           </Typography>
         </Box>
       </CardContent>
-      <CardActions sx={{ marginLeft: "auto" }}>
-        <IconButton color="warning">
-          <ModeEditOutlineIcon />
-        </IconButton>
-        <IconButton color="error">
-          <DeleteForeverIcon />
-        </IconButton>
-      </CardActions>
+
+      {isLoogedInUser() && (
+        <CardActions sx={{ marginLeft: "auto" }}>
+          <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
+            <ModeEditOutlineIcon />
+          </IconButton>
+          <IconButton onClick={handleDelete} color="error">
+            <DeleteForeverIcon />
+          </IconButton>
+        </CardActions>
+      )}
+
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert
+          onClose={() => setOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          This is a success message!
+        </Alert>
+      </Snackbar>
     </Card>
   );
 };
