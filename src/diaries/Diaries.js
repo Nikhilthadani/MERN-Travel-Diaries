@@ -29,7 +29,8 @@ const Diaries = () => {
             location={item.location}
             title={item.title}
             key={index}
-            user={item.user}
+            user={item.user._id}
+            name={item.user.name}
           />
         ))}
     </Box>

@@ -17,7 +17,16 @@ import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
 import { postDelete } from "../api-helpers/helpers";
-const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+const DiaryItem = ({
+  title,
+  description,
+  image,
+  location,
+  date,
+  id,
+  user,
+  name,
+}) => {
   const [open, setOpen] = useState(false);
   const isLoogedInUser = () => {
     if (localStorage.getItem("userId") === user) {
@@ -36,7 +45,7 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
     <Card
       sx={{
         width: "50%",
-        height: "60vh",
+        height: "auto",
         margin: 1,
         padding: 1,
         display: "flex",
@@ -47,7 +56,7 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-            R
+            {name.charAt(0)}
           </Avatar>
         }
         action={
@@ -73,7 +82,7 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
             fontWeight={"bold"}
             variant="caption"
           >
-            Nikhil Thadani:
+            {name}:
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {description}
